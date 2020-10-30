@@ -31,7 +31,9 @@ calcKeys.forEach((key) => {
 });
 
 function getInput(e) {
+   
     if (!e.target.id) {
+         //for that one blank key lel
         return;
     }
     else if (e.target.id === 'clear') {
@@ -42,26 +44,31 @@ function getInput(e) {
         return;
     }
 
-    else if (e.target.id === 'back') number.pop();
+    else if (e.target.id === 'back') number.pop(); //for single character deletion in display
 
     else if (isOperator(e.target.id)) {
         if (number.length === 0 && operation.length === 0 || errorPresent(operation[0])) return;
+        //puts display number in operation and selected operator, resets display
         else if (operation.length === 0) {
             operation[0] = parseFloat(number.join(''));
             operation[1] = setOperator(e.target.id);
             number = [];
         }
+        //for when you select operator after result from equals sign
         else if (operation.length === 1 && number.length === 0) {
             operation[1] = setOperator(e.target.id);
         }
-
+        //for when you select operator after an equal sign and number
         else if (operation.length === 1 && number.length !==0) {
+            
             operation[0] = parseFloat(number.join(''));
             operation[1] = setOperator(e.target.id);
             number = []
         }
+        //changes operator if one is already selected
         else if (operation.length === 2 && number.length === 0) operation[1] = setOperator(e.target.id);
-        
+
+        //finally performs calculation in normal scenarios and resets appropriately
         else {
             operation[2] = parseFloat(number.join(''));
             operation[0] = operate(...operation);
@@ -70,11 +77,14 @@ function getInput(e) {
             number = [];
         }
         }
+        //decides whether to add a negative or positive sign to nubmber
     else if (e.target.id === 'negative') (number[0] === '-') ? number.shift() : number.unshift('-');
 
     else if (e.target.id === '=') {
         if (operation.length === 0 || errorPresent(operation[0])) return;
+        //resets everything if you hit equals with no input
         else if (number.length === 0) operation = [];
+        //performs calculation and resets appropriately
         else {
             operation[2] = parseFloat(number.join(''));
             operation[0] = operate(...operation);
@@ -82,18 +92,21 @@ function getInput(e) {
             number = [];
         }
     }
-    
+    //adds decimal if one isn't already there
     else if (e.target.id === '.' && number.indexOf('.') === -1) number.push(e.target.id);
 
+    //behavior for numbers - adds them to number array and also resets operation if error
     else if (number.length < 12 && e.target.id !== '.') {
         if (errorPresent(operation[0])) operation = [];
         number.push(e.target.id);
     }
 
+    //display current
     if (number.length > 0) {
         display.innerHTML = number.join('');
     }
 
+    //watches for overflow on decimal numbers, truncates number after 12 digits
     else if (operation[0] && operation[0].toString().indexOf('.') !== -1) {
         if (operation[0].toString().substring(0, operation[0].toString().indexOf('.')).length > 12) {
             operation[0] = 'overflow';
@@ -103,6 +116,7 @@ function getInput(e) {
         else display.innerHTML = operation[0];
     }
     
+    //checks for overflow on integers, otherwise prints current result to display
     else {
         if (operation[0] && operation[0].toString().length > 12) {
             operation[0] = 'overflow';
@@ -112,8 +126,7 @@ function getInput(e) {
     }
 }
 
-
-
+//operation functions
 function add(x, y) {
     return x + y;
 }
