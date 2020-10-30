@@ -1,0 +1,1 @@
+Just a simple calculator as a final project for my introduction to web development

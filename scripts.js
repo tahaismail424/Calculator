@@ -1,0 +1,136 @@
+const calcKeys = document.querySelectorAll('.key');
+const display = document.querySelector('.display');
+
+//array that holds display expression
+let operation = [];
+let number = [];
+
+
+//evaluate expression
+
+//keeps expression from getting hazardous
+
+function errorPresent(a) {
+    return (a === 'undefined' || a === 'overflow') ? true : false;
+}
+
+function isOperator(a) {
+    return (a == '+' || a == '÷' || a == '×' || a == '-' || a == '*' || a == '/') ? true : false;
+}
+
+function setOperator(a) {
+    if (a === '+') return add;
+    else if (a === "-") return subtract;
+    else if (a === '÷' || a === '/') return divide;
+    else if (a === '×' || a === '*') return multiply;
+    else return;
+}
+
+calcKeys.forEach((key) => {
+    key.addEventListener('click', getInput)
+});
+
+function getInput(e) {
+    if (!e.target.id) {
+        return;
+    }
+    else if (e.target.id === 'clear') {
+        //resets display expression
+        operation = [];
+        number = [];
+        display.innerHTML = operation.join('');
+        return;
+    }
+
+    else if (e.target.id === 'back') number.pop();
+
+    else if (isOperator(e.target.id)) {
+        if (number.length === 0 && operation.length === 0 || errorPresent(operation[0])) return;
+        else if (operation.length === 0) {
+            operation[0] = parseFloat(number.join(''));
+            operation[1] = setOperator(e.target.id);
+            number = [];
+        }
+        else if (operation.length === 1 && number.length === 0) {
+            operation[1] = setOperator(e.target.id);
+        }
+
+        else if (operation.length === 1 && number.length !==0) {
+            operation[0] = parseFloat(number.join(''));
+            operation[1] = setOperator(e.target.id);
+            number = []
+        }
+        else if (operation.length === 2 && number.length === 0) operation[1] = setOperator(e.target.id);
+        
+        else {
+            operation[2] = parseFloat(number.join(''));
+            operation[0] = operate(...operation);
+            operation[1] = setOperator(e.target.id);
+            operation.pop();
+            number = [];
+        }
+        }
+    else if (e.target.id === 'negative') (number[0] === '-') ? number.shift() : number.unshift('-');
+
+    else if (e.target.id === '=') {
+        if (operation.length === 0 || errorPresent(operation[0])) return;
+        else if (number.length === 0) operation = [];
+        else {
+            operation[2] = parseFloat(number.join(''));
+            operation[0] = operate(...operation);
+            operation.splice(-2);
+            number = [];
+        }
+    }
+    
+    else if (e.target.id === '.' && number.indexOf('.') === -1) number.push(e.target.id);
+
+    else if (number.length < 12 && e.target.id !== '.') {
+        if (errorPresent(operation[0])) operation = [];
+        number.push(e.target.id);
+    }
+
+    if (number.length > 0) {
+        display.innerHTML = number.join('');
+    }
+
+    else if (operation[0] && operation[0].toString().indexOf('.') !== -1) {
+        if (operation[0].toString().substring(0, operation[0].toString().indexOf('.')).length > 12) {
+            operation[0] = 'overflow';
+            display.innerHTML = operation[0];
+        }
+        else if (operation[0].toString().length > 12) display.innerHTML = operation[0].toString().substring(0, 12);
+        else display.innerHTML = operation[0];
+    }
+    
+    else {
+        if (operation[0] && operation[0].toString().length > 12) {
+            operation[0] = 'overflow';
+            display.innerHTML = operation[0];
+        }
+        else operation[0] ? display.innerHTML = operation[0] : display.innerHTML = '';
+    }
+}
+
+
+
+function add(x, y) {
+    return x + y;
+}
+
+function subtract(x, y) {
+    return x - y;
+}
+
+function multiply(x, y) {
+    return x * y;
+}
+
+function divide(x, y) {
+    return ((y !== 0) ? x / y : 'undefined');
+}
+
+function operate(x, operator, y) {
+    console.log(operator(x,y));
+    return operator(x, y);
+}

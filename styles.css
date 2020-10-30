@@ -1,0 +1,74 @@
+@font-face {
+    font-family: calculator;
+    src: url(calculator.ttf);
+}
+
+.numberGrid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    grid-template-rows: repeat(4, minmax(0, 1fr));
+    background-color: #b4bede;
+    border-color: #2f337a;
+    border-style: solid;
+    border-width: 2px;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+}
+
+.top {
+    background-color: #2f337a;
+    height: 100px;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    overflow: auto;
+}
+.display {
+    border-style: solid;
+    border-width: 2px;
+    margin-left: 40px;
+    margin-right: 40px;
+    margin-top: 20px;
+    margin-bottom: 10px;
+    height: 60px;
+    background-color: white;
+    font-family: calculator;
+    padding-right: 10px;
+    font-size: 60px;
+    text-align: right;
+
+
+
+
+}
+
+#\+, #\-, #×, #÷ {
+    background-color: #e09e19
+}
+
+#\= {
+    background-color: #575757
+}
+
+#clear {
+    background-color: #c22323
+}
+.calculator {
+    margin: auto;
+    width: 400px;
+    height: 1000px;
+
+}
+
+h1 {
+    text-align: center;  
+}
+
+.key {
+    margin: 5px;
+    background-color: #2f337a;
+    color: white;
+    border-radius: 5px;
+    height: 60px;
+    font-size: 20px;
+    font-family: Arial, Verdana, sans-serif;
+}
